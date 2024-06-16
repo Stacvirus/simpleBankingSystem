@@ -6,7 +6,7 @@ public class Account {
     private int number;
     private double balance;
     private ArrayList<String> history;
-    public Bank bank;
+    private Bank bank;
     private double interestRate;
 
     public Account(String name){
