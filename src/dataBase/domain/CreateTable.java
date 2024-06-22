@@ -70,15 +70,53 @@ public class CreateTable {
         }
     }
 
-    public ResultSet selectAccountData(){
+    public void insertTransactionData(String name, double amount){
+        try{
+            String query = "INSERT INTO transactions (name, amount) VALUES (?, ?)";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, name);
+            preparedStatement.setDouble(2, amount);
+            preparedStatement.executeUpdate();
+        }catch (Exception e){
+            System.out.println("impossible to insert data in the transaction table, "+e.getMessage());
+        }
+    }
+
+    public ResultSet selectAccountData(String target){
         try {
-            this.result = statement.executeQuery("SELECT name from accounts");
-//            result.close();
+            this.result = statement.executeQuery("SELECT "+target+" from accounts");
             return result;
         }catch (Exception e){
             System.out.println("Error: impossible to select row, "+e.getMessage());
             return null;
         }
-
     }
+
+    public ResultSet selectTransactionsData(String target){
+        try {
+            String query = "SELECT amount from transactions WHERE name = ?";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, target);
+            this.result = preparedStatement.executeQuery();
+            return result;
+        }catch (Exception e){
+            System.out.println("Error: impossible to select row, "+e.getMessage());
+            return null;
+        }
+    }
+
+    public boolean updateAccountData(double balance, int number){
+        try{
+            String query = "UPDATE accounts SET balance = "+balance+" WHERE number = "+number;
+            statement.execute(query);
+            return true;
+        }catch (Exception e){
+            System.out.println("Error: impossible to update data, "+e.getMessage());
+            return false;
+        }
+    }
+
+
+
+
 }
