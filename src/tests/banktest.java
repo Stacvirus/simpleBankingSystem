@@ -38,18 +38,18 @@ public class banktest {
     @Test
     public void addAndAccountToTheBank()throws Exception{
         bank.createAccountTable();
-        bank.addAccount(user);
-        bank.addAccount(savingUser);
-        bank.addAccount(businessUser);
+        bank.addAccount(user.getHolderName(), user.getBalance(), user.getNumber());
+        bank.addAccount(savingUser.getHolderName(), savingUser.getBalance(), savingUser.getNumber());
+        bank.addAccount(businessUser.getHolderName(), savingUser.getBalance(), savingUser.getNumber());
         Assert.assertEquals(3, bank.getNumberOfAccounts("accounts"));
     }
 
     @Test
     public void removeAccountFromTheBank()throws Exception{
         bank.createAccountTable();
-        bank.addAccount(user);
-        bank.addAccount(savingUser);
-        bank.addAccount(businessUser);
+        bank.addAccount(user.getHolderName(), user.getBalance(), user.getNumber());
+        bank.addAccount(savingUser.getHolderName(), savingUser.getBalance(), savingUser.getNumber());
+        bank.addAccount(businessUser.getHolderName(), savingUser.getBalance(), savingUser.getNumber());
 
         bank.deleteAccount(user.getHolderName());
         Assert.assertEquals(2, bank.getNumberOfAccounts("accounts"));
@@ -58,9 +58,9 @@ public class banktest {
     @Test
     public void getAccountByNumberFromTheBank(){
         bank.createAccountTable();
-        bank.addAccount(user);
-        bank.addAccount(savingUser);
-        bank.addAccount(businessUser);
+        bank.addAccount(user.getHolderName(), user.getBalance(), user.getNumber());
+        bank.addAccount(savingUser.getHolderName(), savingUser.getBalance(), savingUser.getNumber());
+        bank.addAccount(businessUser.getHolderName(), savingUser.getBalance(), savingUser.getNumber());
 
         Account account = bank.getAccountByTarget(String.valueOf(businessUser.getNumber()), "number");
         assertEquals("business man", account.getHolderName());
@@ -69,8 +69,8 @@ public class banktest {
     @Test
     public void accountDoNotExistInBank(){
         bank.createAccountTable();
-        bank.addAccount(savingUser);
-        bank.addAccount(businessUser);
+        bank.addAccount(savingUser.getHolderName(), savingUser.getBalance(), savingUser.getNumber());
+        bank.addAccount(businessUser.getHolderName(), savingUser.getBalance(), savingUser.getNumber());
         assertNull(bank.getAccountByTarget(String.valueOf(user.getNumber()), "number"));
     }
 

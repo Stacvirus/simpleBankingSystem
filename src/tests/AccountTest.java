@@ -36,56 +36,58 @@ public class AccountTest {
 
     @Test
     public void getUserBalance(){
-        assertEquals(0.0, user.getBalance(), 0.0);
+        bank.createAccountTable();
+        savingUser.addBank(bank);
+        assertEquals(500.0, savingUser.getBalance(), 0.0);
     }
 
-//    @Test
-//    public void userDepositesMoney()throws Exception{
-//        user.addBank(bank);
-//        user.deposit(200);
-//        assertEquals(200.0, user.getBalance(), 0.0);
-//    }
-//
-//    @Test
-//    public void printAccountTransactionHistory()throws Exception{
-//        user.addBank(bank);
-//        user.deposit(500);
-//        user.withdraw(125);
-//        user.withdraw(50);
-//        user.deposit(325);
-//
-//        assertTrue(user.printHistory());
-//    }
-//
-//    @Test
-//    public void userWithdrawMoney()throws Exception{
-//        user.addBank(bank);
-//        user.deposit(200);
-//        user.withdraw(150);
-//        assertEquals(50, user.getBalance(), 0.0);
-//    }
-//
-//    @Test
-//    public void savingAccountCreated(){
-//        SavingsAccount savingsAccount = new SavingsAccount("stac");
-//        assertEquals(500, savingsAccount.getBalance(), 0.0);
-//    }
-//
-//    @Test
-//    public void getUserAndDoDeposit()throws Exception{
-//        Account user = this.bank.getAccountByName("stac");
-//        double oldBalance = user.getBalance();
-//        user.deposit(50);
-//        assertEquals(oldBalance+50, user.getBalance(),0.0);
-//    }
-//
-//    @Test
-//    public void updateUserAccountData()throws Exception{
-//        Account user = this.bank.getAccountByName("stac");
-//        //this.bank.updateAccount(user.getHolderName(), 500);
-//        user.deposit(400);
-//        assertEquals(900, user.getBalance(), 0.0);
-//
-//    }
+    @Test
+    public void userDepositesMoney(){
+        bank.createAccountTable();
+        savingUser.addBank(bank);
+        assertTrue(savingUser.deposit(50));
+        assertEquals(550.0, savingUser.getBalance(), 0.0);
+    }
+    @Test
+    public void userWithdrawsMoney(){
+        bank.createAccountTable();
+        savingUser.addBank(bank);
+        assertTrue(savingUser.withdraw(50));
+        assertEquals(450.0, savingUser.getBalance(), 0.0);
+    }
 
+    @Test
+    public void printAccountTransactionHistory(){
+        bank.createAccountTable();
+        user.addBank(bank);
+        user.deposit(500);
+        user.withdraw(125);
+        user.withdraw(50);
+        user.deposit(325);
+
+        System.out.println(user.toHistory());
+        assertEquals((500-125-50)+325*1.0,user.getBalance(), 0.0);
+    }
+
+
+    @Test
+    public void getUserAndDoDeposit(){
+        bank.createAccountTable();
+        user.addBank(bank);
+        Account user = this.bank.getAccountByTarget("stac virus", "name");
+        double oldBalance = user.getBalance();
+
+        user.deposit(50);
+        assertEquals(oldBalance+50, user.getBalance(),0.0);
+    }
+
+    @Test
+    public void getUserAndWithdraw()throws Exception{
+        bank.createAccountTable();
+        user.addBank(bank);
+        Account user = this.bank.getAccountByTarget("stac virus", "name");
+
+        user.deposit(400);
+        assertEquals(900, user.getBalance(), 0.0);
+    }
 }

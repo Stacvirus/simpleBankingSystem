@@ -19,6 +19,7 @@ public class Bank {
 
     public void createAccountTable(){
         bankDB.AccountTable();
+        bankDB.TransactionTable();
     }
 
     public void deleteBankTable(String name){
@@ -29,9 +30,12 @@ public class Bank {
         bankDB.removeAccount(name);
     }
 
+    public String selectAccountData(String target){
+        return bankDB.selectAccount(target);
+    }
 
-    public boolean addAccount(Account account){
-        return bankDB.insertAccount(account.getHolderName(), account.getBalance(), account.getNumber());
+    public boolean addAccount(String name, double balance, int number){
+        return bankDB.insertAccount(name, balance, number);
     }
 
     public int getNumberOfAccounts(String target)throws Exception{
@@ -47,11 +51,24 @@ public class Bank {
         return newAccount;
     }
 
-    public Account getAccountByTarget(String number, String target){
-        String ans = bankDB.getAccount(number, target);
-        if(ans != null){
+    public Account getAccountByTarget(String targetColumn, String target){
+        String ans = bankDB.getAccount(targetColumn, target);
+        System.out.println(ans.isEmpty());
+        if(!ans.isEmpty()){
             return this.createAccount(ans);
         }
         return null;
+    }
+
+    public void setTransactionData(String name, double amount){
+        bankDB.insertTransaction(name, amount);
+    }
+
+    public void updateAccountData(double amount, int accountNumber){
+        System.out.println("updata account: "+bankDB.updateAccountData(amount, accountNumber));
+    }
+
+    public String getHistoryTransaction(String name){
+        return bankDB.selectTransaction(name);
     }
 }

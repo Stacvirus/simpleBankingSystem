@@ -33,29 +33,13 @@ public class DataBase {
         bank.insertTransactionData(name, amount);
     }
 
-    public String selectAccount(String target)throws Exception{
-        List<String> ans = new ArrayList<>();
-        ResultSet res = bank.selectAccountData(target);
-        while(res.next()){
-            ans.add(String.valueOf(res.getDouble(target)));
-        }
-        res.close();
-        return ans.toString();
+    public String selectAccount(String target){
+        return bank.selectAccountData(target);
+
     }
 
-    public String selectTransaction(String target)throws Exception{
-        StringBuilder ans = new StringBuilder();
-        ResultSet res = bank.selectTransactionsData(target);
-        while(res.next()){
-            double amount = res.getDouble("amount");
-            if(amount > 0) {
-                ans.append("deposit: ").append(amount).append(", ");
-            } else {
-                ans.append("withdraw: ").append(amount * -1).append(", ");
-            }
-        }
-        res.close();
-        return ans.toString();
+    public String selectTransaction(String target){
+        return bank.selectTransactionsData(target);
     }
 
     public boolean updateAccountData(double balance, int number){

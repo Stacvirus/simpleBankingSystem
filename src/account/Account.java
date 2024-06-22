@@ -2,9 +2,6 @@ package account;
 
 import bank.Bank;
 
-import java.io.FileWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 public class Account {
@@ -24,9 +21,9 @@ public class Account {
         this.balance = balance;
         this.bank = null;
     }
-    public boolean addBank(Bank bank)throws Exception{
+    public void addBank(Bank bank){
         this.bank = bank;
-        return this.bank.addAccount(this);
+        this.bank.addAccount(holderName, balance, number);
     }
 
     public int generateAccountNumber(){
@@ -47,7 +44,8 @@ public class Account {
     }
 
     public double getBalance(){
-        return this.balance;
+        this.balance = Double.parseDouble(bank.selectAccountData("balance"));
+        return balance;
     }
 
     public int getNumber() {
@@ -60,5 +58,32 @@ public class Account {
 
     public void setBalance(double balance) {
         this.balance = balance;
+        //bank.updateAccountData(this.balance, number);
+    }
+
+    public boolean deposit(double amount){
+        if(amount > 0){
+            this.balance += amount;
+            bank.updateAccountData(balance, number);
+            bank.setTransactionData(holderName, amount);
+            return true;
+        }
+        System.out.println("Error: invalid amount of money");
+        return false;
+    }
+
+    public boolean withdraw(double amount){
+        if(amount > 0 && amount < balance){
+            this.balance -= amount;
+            bank.updateAccountData(balance, number);
+            bank.setTransactionData(holderName, amount);
+            return true;
+        }
+        System.out.println("Error: insufficient amount of money");
+        return false;
+    }
+
+    public String toHistory(){
+        return bank.getHistoryTransaction(holderName);
     }
 }

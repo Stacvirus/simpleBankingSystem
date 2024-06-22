@@ -87,23 +87,39 @@ public class CreateTable {
         }
     }
 
-    public ResultSet selectAccountData(String target){
+    public String selectAccountData(String target){
         try {
+            StringBuilder ans = new StringBuilder();
             this.result = statement.executeQuery("SELECT "+target+" from accounts");
-            return result;
+            while(result.next()){
+                ans.append(result.getDouble(target));
+            }
+            result.close();
+            return ans.toString();
         }catch (Exception e){
             System.out.println("Error: impossible to select row, "+e.getMessage());
             return null;
         }
     }
 
-    public ResultSet selectTransactionsData(String target){
+    public String selectTransactionsData(String target){
         try {
             String query = "SELECT amount from transactions WHERE name = ?";
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, target);
             this.result = preparedStatement.executeQuery();
-            return result;
+
+            StringBuilder ans = new StringBuilder();
+            while(result.next()){
+                double amount = result.getDouble("amount");
+                if(amount > 0) {
+                    ans.append("deposit: ").append(amount).append(", ");
+                } else {
+                    ans.append("withdraw: ").append(amount * -1).append(", ");
+                }
+            }
+            result.close();
+            return ans.toString();
         }catch (Exception e){
             System.out.println("Error: impossible to select row, "+e.getMessage());
             return null;
@@ -146,18 +162,18 @@ public class CreateTable {
         }
     }
 
-    public  String selectAccountByNumber(String num, String row){
-        int convert = 0;
+    public  String selectAccountByNumber(String name, String row){
+        int number = 0;
         if(row.equals("number")){
-            convert = Integer.parseInt(num);
+            number = Integer.parseInt(name);
         }
         try{
             preparedStatement = connection.prepareStatement("SELECT name, balance, number FROM accounts WHERE "+row+" = ?");
 
-            if(convert == 0){
-                preparedStatement.setString(1, num);
+            if(number == 0){
+                preparedStatement.setString(1, name);
             }else {
-                preparedStatement.setInt(1, convert);
+                preparedStatement.setInt(1, number);
             }
             this.result = preparedStatement.executeQuery();
             StringBuilder ans = new StringBuilder();
