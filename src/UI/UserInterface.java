@@ -16,7 +16,7 @@ public class UserInterface {
 
     public UserInterface(Scanner scanner) throws Exception{
         this.scanner = scanner;
-        this.bank = new Bank("data.txt");
+        this.bank = new Bank("data");
     }
 
     public void printFirstMenu(){
@@ -45,9 +45,9 @@ public class UserInterface {
 
             try {
                 int input = Integer.parseInt(userInput);
-                //cmd.handleAccountChoice(input);
+                cmd.handleAccountChoice(input);
             }catch (Exception e){
-                System.out.println("enter valid option!!");
+                System.out.println("enter valid option");
             }
             printFirstMenu();
         }
@@ -77,7 +77,7 @@ public class UserInterface {
             }
             try{
                 int input = Integer.parseInt(userInput);
-                //cmd.handleAccountServices(input);
+                cmd.handleAccountServices(input);
             }catch (Exception e){
                 System.out.println("Error: "+e.getMessage());
             }

@@ -21,9 +21,9 @@ public class Account {
         this.balance = balance;
         this.bank = null;
     }
-    public void addBank(Bank bank){
+    public boolean addBank(Bank bank){
         this.bank = bank;
-        this.bank.addAccount(holderName, balance, number);
+        return this.bank.addAccount(holderName, balance, number);
     }
 
     public int generateAccountNumber(){
@@ -38,13 +38,14 @@ public class Account {
 
     @Override
     public String toString(){
-        return "account.Account holder name: "+this.holderName
+        return "account holder name: "+this.holderName
             +"\nBalance: "+this.balance+" FCFA"
-            +"\naccount.Account number: "+this.number;
+            +"\naccount number: "+this.number
+                + "\nbank info: "+this.bank;
     }
 
     public double getBalance(){
-        this.balance = Double.parseDouble(bank.selectAccountData("balance"));
+        System.out.println("in getting balance");
         return balance;
     }
 
@@ -62,10 +63,11 @@ public class Account {
     }
 
     public boolean deposit(double amount){
+
         if(amount > 0){
             this.balance += amount;
-            bank.updateAccountData(balance, number);
-            bank.setTransactionData(holderName, amount);
+            bank.updateAccountData(this.balance, this.number);
+            bank.setTransactionData(this.holderName, amount);
             return true;
         }
         System.out.println("Error: invalid amount of money");
@@ -76,7 +78,7 @@ public class Account {
         if(amount > 0 && amount < balance){
             this.balance -= amount;
             bank.updateAccountData(balance, number);
-            bank.setTransactionData(holderName, amount);
+            bank.setTransactionData(holderName, amount * -1);
             return true;
         }
         System.out.println("Error: insufficient amount of money");

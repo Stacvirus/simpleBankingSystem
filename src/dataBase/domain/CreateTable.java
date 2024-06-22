@@ -1,8 +1,6 @@
 package dataBase.domain;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CreateTable {
     private Statement statement;
@@ -59,8 +57,23 @@ public class CreateTable {
         }
     }
 
+    public boolean isExist(int number){
+        try{
+            preparedStatement = connection.prepareStatement("SELECT 1 FROM accounts WHERE number = ?");
+            preparedStatement.setInt(1, number);
+            this.result = preparedStatement.executeQuery();
+            return result.next();
+        }catch (Exception e){
+            System.out.println("Error: impossible to check the existence on the row, "+e.getMessage());
+        }
+        return false;
+    }
+
     public boolean insertAccountData(String name, double balance, int number){
         try{
+            if(isExist(number)){
+                return false;
+            }
             String query = "INSERT INTO accounts (name, balance, number) VALUES (?, ?, ?)";
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, name);
@@ -87,10 +100,14 @@ public class CreateTable {
         }
     }
 
-    public String selectAccountData(String target){
+    public String selectAccountData(String target, String name){
+
         try {
             StringBuilder ans = new StringBuilder();
-            this.result = statement.executeQuery("SELECT "+target+" from accounts");
+            preparedStatement = connection.prepareStatement("SELECT "+target+" from accounts WHERE name = ?");
+            preparedStatement.setString(1, name);
+            this.result = preparedStatement.executeQuery();
+
             while(result.next()){
                 ans.append(result.getDouble(target));
             }
@@ -137,32 +154,37 @@ public class CreateTable {
         }
     }
 
-    public ResultSet numberOfElements(String target){
+    public int numberOfElements(String target){
         try{
-            return statement.executeQuery("SELECT COUNT(*) AS rowcount FROM "+target);
+            this.result = statement.executeQuery("SELECT COUNT(*) AS rowcount FROM "+target);
+            if(result.next()){
+                return result.getInt("rowcount");
+            }
+            result.close();
         }catch (Exception e){
             System.out.println("Error: impossible to get the table size, "+e.getMessage());
-            return null;
+            return 0;
         }
+        return 0;
     }
 
     public void deleteAccount(String name){
-        try{System.out.println("zero: "+name);
+        try{
             preparedStatement = connection.prepareStatement("DELETE FROM accounts WHERE name = ?");
             preparedStatement.setString(1, name);
             preparedStatement.executeUpdate();
-            System.out.println("first: "+name);
 
             preparedStatement = connection.prepareStatement("DELETE FROM transactions WHERE name = ?");
             preparedStatement.setString(1, name);
             preparedStatement.executeUpdate();
-            System.out.println("second: "+name);
+
         }catch (Exception e){
             System.out.println("Error: impossible to delete data, "+e.getMessage());
         }
     }
 
     public  String selectAccountByNumber(String name, String row){
+
         int number = 0;
         if(row.equals("number")){
             number = Integer.parseInt(name);
@@ -183,13 +205,22 @@ public class CreateTable {
                 ans.append(result.getInt("number"));
             }
 
-            if(ans.toString().isEmpty()){
-                return null;
-            }
             return ans.toString();
         }catch (Exception e){
             System.out.println("Error: impossible to get account's data, "+e.getMessage());
         }
         return null;
     }
+    public boolean tableExist(String name){
+        try{
+            preparedStatement = connection.prepareStatement("SELECT name FROM sqlite_master WHERE type='table' AND name = ?");
+            preparedStatement.setString(1, name);
+            this.result = preparedStatement.executeQuery();
+            return result.next();
+        }catch (Exception e){
+            System.out.println("Error: impossible to check table existence, "+e.getMessage());
+        }
+        return false;
+    }
+
 }

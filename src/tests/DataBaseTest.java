@@ -11,10 +11,15 @@ public class DataBaseTest {
     private DataBase db;
     @Before
     public void init(){
-        this.db = new DataBase("bankTest");
+        this.db = new DataBase("data");
 
         this.db.deleteTable("accounts");
         this.db.deleteTable("transactions");
+    }
+
+    @Test
+    public void dummy(){
+        System.out.println("test that eraces the db!");
     }
 
     @Test
@@ -33,7 +38,7 @@ public class DataBaseTest {
     public void insertAndSelectAccountData()throws Exception{
         db.AccountTable();
         db.insertAccount("stac", 45.75, 123654789);
-        assertEquals("stac", db.selectAccount("name"));
+        assertEquals("45.75", db.selectAccount("balance", "stac"));
     }
 
     @Test
@@ -41,24 +46,22 @@ public class DataBaseTest {
         db.AccountTable();
         db.insertAccount("stac", 45.75, 123654789);
         db.updateAccountData(50.55, 123654789);
-        assertEquals("50.55", db.selectAccount("balance"));
+        assertEquals("50.55", db.selectAccount("balance", "stac"));
     }
 
     @Test
     public void insertAndSelectTransationData()throws Exception{
         db.TransactionTable();
         db.insertTransaction("stac", -45.75);
-//        db.insertTransaction("stac", 115);
-//        db.insertTransaction("stac", 125);
         assertEquals("withdraw: 45.75, ", db.selectTransaction("stac"));
     }
 
     @Test
-    public void countTheNumberOfAccounts()throws Exception{
+    public void countTheNumberOfAccounts(){
         db.AccountTable();
         db.insertAccount("stac", 525,456123);
-        db.insertAccount("stacfucker", 525,456123);
-        db.insertAccount("stacvirus", 525,456123);
+        db.insertAccount("stacfucker", 525,46123);
+        db.insertAccount("stacvirus", 525,45613);
 
         assertEquals(3, db.countAccounts("accounts"));
     }

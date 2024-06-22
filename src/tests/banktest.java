@@ -38,6 +38,10 @@ public class banktest {
     @Test
     public void addAndAccountToTheBank()throws Exception{
         bank.createAccountTable();
+        this.user.addBank(bank);
+        this.savingUser.addBank(bank);
+        this.businessUser.addBank(bank);
+
         bank.addAccount(user.getHolderName(), user.getBalance(), user.getNumber());
         bank.addAccount(savingUser.getHolderName(), savingUser.getBalance(), savingUser.getNumber());
         bank.addAccount(businessUser.getHolderName(), savingUser.getBalance(), savingUser.getNumber());
@@ -47,6 +51,10 @@ public class banktest {
     @Test
     public void removeAccountFromTheBank()throws Exception{
         bank.createAccountTable();
+        this.user.addBank(bank);
+        this.savingUser.addBank(bank);
+        this.businessUser.addBank(bank);
+
         bank.addAccount(user.getHolderName(), user.getBalance(), user.getNumber());
         bank.addAccount(savingUser.getHolderName(), savingUser.getBalance(), savingUser.getNumber());
         bank.addAccount(businessUser.getHolderName(), savingUser.getBalance(), savingUser.getNumber());
@@ -58,6 +66,10 @@ public class banktest {
     @Test
     public void getAccountByNumberFromTheBank(){
         bank.createAccountTable();
+        this.user.addBank(bank);
+        this.savingUser.addBank(bank);
+        this.businessUser.addBank(bank);
+
         bank.addAccount(user.getHolderName(), user.getBalance(), user.getNumber());
         bank.addAccount(savingUser.getHolderName(), savingUser.getBalance(), savingUser.getNumber());
         bank.addAccount(businessUser.getHolderName(), savingUser.getBalance(), savingUser.getNumber());
@@ -69,6 +81,9 @@ public class banktest {
     @Test
     public void accountDoNotExistInBank(){
         bank.createAccountTable();
+        this.savingUser.addBank(bank);
+        this.businessUser.addBank(bank);
+
         bank.addAccount(savingUser.getHolderName(), savingUser.getBalance(), savingUser.getNumber());
         bank.addAccount(businessUser.getHolderName(), savingUser.getBalance(), savingUser.getNumber());
         assertNull(bank.getAccountByTarget(String.valueOf(user.getNumber()), "number"));
@@ -77,7 +92,8 @@ public class banktest {
     @Test
     public void getAccountByNameFromTheBank()throws Exception{
         bank.createAccountTable();
-        this.user.addBank(bank);
+
+        this.savingUser.addBank(bank);
         this.savingUser.addBank(bank);
 
         Assert.assertEquals(500.0, bank.getAccountByTarget(savingUser.getHolderName(),"name").getBalance(), 0.0);

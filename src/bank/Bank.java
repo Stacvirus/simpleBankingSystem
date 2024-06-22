@@ -15,6 +15,7 @@ public class Bank {
 
     public Bank(String dataBaseName)throws Exception{
         this.bankDB = new DataBase(dataBaseName);
+        bankDB.createNewTables("accounts");
     }
 
     public void createAccountTable(){
@@ -30,15 +31,20 @@ public class Bank {
         bankDB.removeAccount(name);
     }
 
-    public String selectAccountData(String target){
-        return bankDB.selectAccount(target);
+    public String toString(){
+        return "number of accounts: "+this.getNumberOfAccounts("accounts");
+    }
+
+    public String selectAccountData(String target, String name){
+        System.out.println("trying to get account balance");
+        return bankDB.selectAccount(target, name);
     }
 
     public boolean addAccount(String name, double balance, int number){
         return bankDB.insertAccount(name, balance, number);
     }
 
-    public int getNumberOfAccounts(String target)throws Exception{
+    public int getNumberOfAccounts(String target){
         return bankDB.countAccounts(target);
     }
 
@@ -47,6 +53,7 @@ public class Bank {
         Account newAccount = new Account(res[0]);
         newAccount.setBalance(Double.parseDouble(res[1]));
         newAccount.setNumber(Integer.parseInt(res[2]));
+        newAccount.addBank(this);
 
         return newAccount;
     }
@@ -55,7 +62,9 @@ public class Bank {
         String ans = bankDB.getAccount(targetColumn, target);
         System.out.println(ans.isEmpty());
         if(!ans.isEmpty()){
-            return this.createAccount(ans);
+            Account res = this.createAccount(ans);
+            System.out.println("old account: "+res);
+            return res;
         }
         return null;
     }
@@ -65,7 +74,7 @@ public class Bank {
     }
 
     public void updateAccountData(double amount, int accountNumber){
-        System.out.println("updata account: "+bankDB.updateAccountData(amount, accountNumber));
+        bankDB.updateAccountData(amount, accountNumber);
     }
 
     public String getHistoryTransaction(String name){

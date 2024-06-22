@@ -33,9 +33,8 @@ public class DataBase {
         bank.insertTransactionData(name, amount);
     }
 
-    public String selectAccount(String target){
-        return bank.selectAccountData(target);
-
+    public String selectAccount(String target, String name){
+        return bank.selectAccountData(target, name);
     }
 
     public String selectTransaction(String target){
@@ -46,13 +45,8 @@ public class DataBase {
         return bank.updateAccountData(balance, number);
     }
 
-    public int countAccounts(String target)throws Exception{
-        ResultSet res = bank.numberOfElements(target);
-        if(res.next()){
-            return res.getInt("rowcount");
-        }
-        res.close();
-        return 0;
+    public int countAccounts(String target){
+        return bank.numberOfElements(target);
     }
 
     public void removeAccount(String name){
@@ -62,4 +56,12 @@ public class DataBase {
     public String getAccount(String number, String target){
         return bank.selectAccountByNumber(number, target);
     }
+
+    public void createNewTables(String name){
+        if(!bank.tableExist(name)){
+            this.AccountTable();
+            this.TransactionTable();
+        }
+    }
+
 }

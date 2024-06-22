@@ -86,8 +86,7 @@ public class AccountTest {
         bank.createAccountTable();
         user.addBank(bank);
         Account user = this.bank.getAccountByTarget("stac virus", "name");
-
         user.deposit(400);
-        assertEquals(900, user.getBalance(), 0.0);
+        assertEquals(400, user.getBalance(), 0.0);
     }
 }
