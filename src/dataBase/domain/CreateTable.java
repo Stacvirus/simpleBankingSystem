@@ -1,6 +1,8 @@
 package dataBase.domain;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreateTable {
     private Statement statement;
@@ -57,7 +59,7 @@ public class CreateTable {
         }
     }
 
-    public void insertAccountData(String name, double balance, int number){
+    public boolean insertAccountData(String name, double balance, int number){
         try{
             String query = "INSERT INTO accounts (name, balance, number) VALUES (?, ?, ?)";
             preparedStatement = connection.prepareStatement(query);
@@ -65,8 +67,11 @@ public class CreateTable {
             preparedStatement.setDouble(2, balance);
             preparedStatement.setInt(3, number);
             preparedStatement.executeUpdate();
+            System.out.println("inserting account successfull!");
+            return true;
         }catch(Exception e){
             System.out.println("Error: impossible to insert, "+e.getMessage());
+            return false;
         }
     }
 
@@ -116,7 +121,59 @@ public class CreateTable {
         }
     }
 
+    public ResultSet numberOfElements(String target){
+        try{
+            return statement.executeQuery("SELECT COUNT(*) AS rowcount FROM "+target);
+        }catch (Exception e){
+            System.out.println("Error: impossible to get the table size, "+e.getMessage());
+            return null;
+        }
+    }
 
+    public void deleteAccount(String name){
+        try{System.out.println("zero: "+name);
+            preparedStatement = connection.prepareStatement("DELETE FROM accounts WHERE name = ?");
+            preparedStatement.setString(1, name);
+            preparedStatement.executeUpdate();
+            System.out.println("first: "+name);
 
+            preparedStatement = connection.prepareStatement("DELETE FROM transactions WHERE name = ?");
+            preparedStatement.setString(1, name);
+            preparedStatement.executeUpdate();
+            System.out.println("second: "+name);
+        }catch (Exception e){
+            System.out.println("Error: impossible to delete data, "+e.getMessage());
+        }
+    }
 
+    public  String selectAccountByNumber(String num, String row){
+        int convert = 0;
+        if(row.equals("number")){
+            convert = Integer.parseInt(num);
+        }
+        try{
+            preparedStatement = connection.prepareStatement("SELECT name, balance, number FROM accounts WHERE "+row+" = ?");
+
+            if(convert == 0){
+                preparedStatement.setString(1, num);
+            }else {
+                preparedStatement.setInt(1, convert);
+            }
+            this.result = preparedStatement.executeQuery();
+            StringBuilder ans = new StringBuilder();
+            while (result.next()){
+                ans.append(result.getString("name")).append(",");
+                ans.append(result.getDouble("balance")).append(",");
+                ans.append(result.getInt("number"));
+            }
+
+            if(ans.toString().isEmpty()){
+                return null;
+            }
+            return ans.toString();
+        }catch (Exception e){
+            System.out.println("Error: impossible to get account's data, "+e.getMessage());
+        }
+        return null;
+    }
 }

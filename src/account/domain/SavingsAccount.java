@@ -10,7 +10,4 @@ public class SavingsAccount extends Account {
         this.fees = 2;
     }
 
-    public boolean deduceFees(){
-        return super.deductFees(this.fees);
-    }
 }

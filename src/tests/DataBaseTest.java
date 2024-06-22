@@ -1,6 +1,6 @@
 package tests;
 
-import dataBase.Main;
+import dataBase.DataBase;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,10 +8,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class DataBaseTest {
-    private Main db;
+    private DataBase db;
     @Before
     public void init(){
-        this.db = new Main("bankTest");
+        this.db = new DataBase("bankTest");
 
         this.db.deleteTable("accounts");
         this.db.deleteTable("transactions");
@@ -51,5 +51,15 @@ public class DataBaseTest {
 //        db.insertTransaction("stac", 115);
 //        db.insertTransaction("stac", 125);
         assertEquals("withdraw: 45.75, ", db.selectTransaction("stac"));
+    }
+
+    @Test
+    public void countTheNumberOfAccounts()throws Exception{
+        db.AccountTable();
+        db.insertAccount("stac", 525,456123);
+        db.insertAccount("stacfucker", 525,456123);
+        db.insertAccount("stacvirus", 525,456123);
+
+        assertEquals(3, db.countAccounts("accounts"));
     }
 }

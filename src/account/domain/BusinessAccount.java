@@ -10,13 +10,9 @@ public class BusinessAccount extends Account {
         this.fees = 5;
     }
 
-    public boolean deduceFees(){
-        return super.deductFees(this.fees);
-    }
 
     public void print(){
         System.out.println(super.toString()
-                +"\nFees: "
                 +this.fees
                 +"\n----------");
     }

@@ -1,14 +1,15 @@
 package dataBase;
 
+import account.Account;
 import dataBase.domain.CreateTable;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main {
+public class DataBase {
     private CreateTable bank;
-    public Main(String dbName){
+    public DataBase(String dbName){
         this.bank = new CreateTable(dbName);
     }
 
@@ -24,8 +25,8 @@ public class Main {
         bank.removeTable(name);
     }
 
-    public void insertAccount(String name, double balance, int num){
-        bank.insertAccountData(name,balance, num);
+    public boolean insertAccount(String name, double balance, int num){
+        return bank.insertAccountData(name,balance, num);
     }
 
     public void insertTransaction(String name, double amount){
@@ -59,5 +60,22 @@ public class Main {
 
     public boolean updateAccountData(double balance, int number){
         return bank.updateAccountData(balance, number);
+    }
+
+    public int countAccounts(String target)throws Exception{
+        ResultSet res = bank.numberOfElements(target);
+        if(res.next()){
+            return res.getInt("rowcount");
+        }
+        res.close();
+        return 0;
+    }
+
+    public void removeAccount(String name){
+        bank.deleteAccount(name);
+    }
+
+    public String getAccount(String number, String target){
+        return bank.selectAccountByNumber(number, target);
     }
 }

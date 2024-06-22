@@ -45,7 +45,7 @@ public class UserInterface {
 
             try {
                 int input = Integer.parseInt(userInput);
-                cmd.handleAccountChoice(input);
+                //cmd.handleAccountChoice(input);
             }catch (Exception e){
                 System.out.println("enter valid option!!");
             }
@@ -77,7 +77,7 @@ public class UserInterface {
             }
             try{
                 int input = Integer.parseInt(userInput);
-                cmd.handleAccountServices(input);
+                //cmd.handleAccountServices(input);
             }catch (Exception e){
                 System.out.println("Error: "+e.getMessage());
             }
